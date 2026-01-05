@@ -27,6 +27,13 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
      console.log('A user connected:', socket.id);
 
+     socket.on('join_user', (userId) => {
+          if (userId) {
+               socket.join(`user:${userId}`);
+               console.log(`Socket ${socket.id} joined room user:${userId}`);
+          }
+     });
+
      socket.on('disconnect', () => {
           console.log('User disconnected:', socket.id);
      });
@@ -41,10 +48,19 @@ app.post('/api/socket/update', (req, res) => {
      }
 
      // Broadcast to all connected clients
-     // Event name convention: 'post:update'
-     io.emit('post:update', { type, postId, data });
+     if (type === 'message:new') {
+          // Expect data to contain receiverId
+          const { receiverId } = data;
+          if (receiverId) {
+               io.to(`user:${receiverId}`).emit('message:new', data);
+               console.log(`Sent DM to user:${receiverId}`);
+          }
+     } else {
+          // Event name convention: 'post:update'
+          io.emit('post:update', { type, postId, data });
+     }
 
-     console.log(`Broadcasted update for post ${postId}: ${type}`);
+     console.log(`Broadcasted update: ${type}`);
      res.json({ success: true });
 });
 
