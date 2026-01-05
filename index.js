@@ -8,14 +8,14 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-     origin: ["http://localhost:3000","https://insta-clone-mauve-gamma.vercel.app/login"],
+     origin: ["http://localhost:3000", "https://insta-clone-mauve-gamma.vercel.app"],
      methods: ["GET", "POST"]
 }));
 app.use(express.json());
 
 const io = new Server(server, {
      cors: {
-          origin: ["http://localhost:3000","https://insta-clone-mauve-gamma.vercel.app/login"],
+          origin: ["http://localhost:3000", "https://insta-clone-mauve-gamma.vercel.app"],
           methods: ["GET", "POST"]
      }
 });
