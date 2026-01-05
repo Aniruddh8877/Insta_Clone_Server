@@ -13,6 +13,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+     res.send('Instagram Clone Real-time Server is Running');
+});
+
 const io = new Server(server, {
      cors: {
           origin: ["http://localhost:3000", "https://insta-clone-mauve-gamma.vercel.app"],
